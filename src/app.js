@@ -1,6 +1,7 @@
 const express = require('express')
 
 const app = express();
+//const port = process.env.PORT || 4001;
 
 
 let data =[{ "id": "2", "name": 'Andrew Mead', "age": "18" }, { "id": "1", "name": 'Ella Ginzburg', "age": "30" }];
@@ -11,11 +12,12 @@ let dataProducts=[{ "id": "2", "product": 'Apple'},{"id":"3","product":"Orange"}
 //another option res.send(JSON.stringify({key:"value"}));
 app.get('/users', (req, res) => {
     try{
-        res.json(data);
+        res.json(data);//send back json
     }
     catch(error)
     {
-        res.send({ error: 'Error'+error});
+        console.log(JSON.stringify(error));
+        res.status(500).send({error});
     }
 })
 //postman get :http://localhost:3030/products
@@ -52,6 +54,9 @@ app.post('/user', (req, res) => {
 
 //postman post:http://localhost:3030/product body(raw):{"id":"4","product":"Onion"}
 //not use bodyparser.json()=deprecated
+// a. express.json() is a method inbuilt in express to recognize the incoming Request Object as a JSON Object. This method is called as a middleware in your application using the code: app.use(express.json());
+
+// b. express.urlencoded() is a method inbuilt in express to recognize the incoming Request Object as strings or arrays. This method is called as a middleware in your application using the code: app.use(express.urlencoded());
 app.use(express.json());
 app.post('/product', (req, res) => {
     try{
@@ -122,7 +127,7 @@ app.get('*', (req, res) => {
     })
 })
 
-//decide which port to run webserver on
+//decide which port to run webserver on, arg port and  callback
 app.listen(3030, () => {
     console.log('Server is up on port 3030.')
 })
